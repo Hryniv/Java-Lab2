@@ -25,8 +25,29 @@ class CalculatorTest {
     }
 
     @Test
-    void  UnknownAmountOfNumberTest() {
+    void UnknownAmountOfNumberTest() {
         String numbers = "1,2,3,4,5,6,7,8,9,10";
         Assert.assertEquals(calculator.Add(numbers), 55);
     }
+
+    @Test
+    void StringNewlineBetweenNumbersTest () {
+        String numbers = "1,2\n3,4";
+        Assert.assertEquals(calculator.Add(numbers), 10);
+    }
+
+    @Test
+    public void InvalidInputTest() {
+        String numbers = "1,2,\n4";
+        try {
+            calculator.Add(numbers);
+        } catch (RuntimeException e) {
+            Assert.assertNotNull(e.getMessage(), "Your exception should have a description message\n");
+            return;
+        }
+        Assert.fail("You should throw an " +
+                "exception with message " +
+                "Invalid input");
+    }
+
 }
