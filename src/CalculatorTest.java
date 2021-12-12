@@ -50,4 +50,10 @@ class CalculatorTest {
                 "Invalid input");
     }
 
+    @Test
+    public void DifferentDelimitersTest() {
+        String numbers = "//;\n1;3;2;4";
+        Assert.assertEquals(calculator.Add(numbers), 10);
+    }
+
 }
