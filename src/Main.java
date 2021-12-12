@@ -2,9 +2,11 @@
 
 public class Main {
     public static void main(String[] args) {
-        Calculator calculator = new Calculator();
-        int i = calculator.Add("1,4");
-        System.out.println(i);
+
+        int j = Integer.parseInt("-2");
+        if (j < 0) {
+            System.out.println("-2");;
+        }
     }
 
 }

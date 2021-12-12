@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -5,6 +8,7 @@ public class Calculator {
     private int sum = 0;
     String[] numbersArray;
     String delimiter = "[\n,]";
+    List<String> negativeNumbers = new ArrayList<>();
 
     public int Add(String numbers) {
         switch (numbers.length()) {
@@ -37,7 +41,14 @@ public class Calculator {
                 }
 
                 for (String number: numbersArray) {
+                    if (Integer.parseInt(number) < 0) {
+                        negativeNumbers.add(number);
+                    }
                     sum += Integer.parseInt(number);
+                }
+                if (!negativeNumbers.isEmpty()) {
+                    String message = "Negative not allow " + negativeNumbers.toString().replace("[", "").replace("]", "");
+                    throw new NegativeNumberException(message);
                 }
                 return sum;
             }

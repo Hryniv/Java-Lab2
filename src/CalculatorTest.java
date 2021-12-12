@@ -56,4 +56,24 @@ class CalculatorTest {
         Assert.assertEquals(calculator.Add(numbers), 10);
     }
 
+    @Test
+    public void MultipleNegativesNumbersTest() {
+        String numbers = "-1,2,3,5,-2,-9";
+        try {
+            calculator.Add(numbers);
+        }   catch (NegativeNumberException e) {
+            Assert.assertEquals(e.getMessage(), "Negative not allow -1, -2, -9");
+        }
+    }
+
+    @Test
+    public void NegativeNumberTest() {
+        String numbers = "1,2,3,-5,2";
+        try {
+            calculator.Add(numbers);
+        } catch (NegativeNumberException e) {
+            Assert.assertEquals(e.getMessage(), "Negative not allow -5");
+        }
+    }
+
 }
