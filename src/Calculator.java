@@ -41,15 +41,18 @@ public class Calculator {
                 }
 
                 for (String number: numbersArray) {
-                    if (Integer.parseInt(number) < 0) {
+                    int  current = Integer.parseInt(number);
+                    if (current < 0) {
                         negativeNumbers.add(number);
                     }
-                    sum += Integer.parseInt(number);
+                    sum += current > 1000 ? 0: current;
                 }
+
                 if (!negativeNumbers.isEmpty()) {
                     String message = "Negative not allow " + negativeNumbers.toString().replace("[", "").replace("]", "");
                     throw new NegativeNumberException(message);
                 }
+
                 return sum;
             }
         }

@@ -76,4 +76,10 @@ class CalculatorTest {
         }
     }
 
+    @Test
+    public void NumberBiggerThan1000Test () {
+        String numbers = "1001,100,10,1";
+        Assert.assertEquals(calculator.Add(numbers), 111);
+    }
+
 }
