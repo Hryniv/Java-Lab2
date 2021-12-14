@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,24 +20,7 @@ public class Calculator {
                     throw new RuntimeException("Invalid input");
                 }
 
-                if (Pattern.matches("//.+\n.+", numbers)) {
-
-                    Pattern pattern = Pattern.compile("//.+\n", Pattern.CASE_INSENSITIVE);
-                    Matcher matcher = pattern.matcher(numbers);
-                    int startSubstring = 0;
-
-                    while (matcher.find()) {
-
-                        startSubstring = matcher.end();
-                        delimiter = numbers.substring(matcher.start() + 2, matcher.end() - 1);
-
-                    }
-                    numbersArray = numbers.substring(startSubstring).split(delimiter);
-
-                }
-                else {
-                    numbersArray = numbers.split(delimiter);
-                }
+                numbersArray = getNumbersArray(numbers, delimiter);
 
                 for (String number: numbersArray) {
                     int  current = Integer.parseInt(number);
@@ -56,5 +38,33 @@ public class Calculator {
                 return sum;
             }
         }
+    }
+
+    private static String[] getNumbersArray(String numbers, String delimiter) {
+        String[] numbersArray;
+
+        if (numbers.startsWith("//[")) {
+            Pattern pattern = Pattern.compile("//\\[(.+)]\n(.+)", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(numbers);
+            matcher.matches();
+
+            delimiter = matcher.group(1);
+            numbers = matcher.group(2);
+            numbersArray = numbers.split(Pattern.quote(delimiter));
+
+        } else if (numbers.startsWith("//")) {
+            Pattern pattern = Pattern.compile("//(.+)\n(.+)", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(numbers);
+            matcher.matches();
+
+            delimiter = matcher.group(1);
+            numbers = matcher.group(2);
+            numbersArray = numbers.split(Pattern.quote(delimiter));
+
+        } else {
+            numbersArray = numbers.split(delimiter);
+        }
+
+        return numbersArray;
     }
 }

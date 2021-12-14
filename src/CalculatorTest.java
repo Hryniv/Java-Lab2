@@ -71,6 +71,7 @@ class CalculatorTest {
         String numbers = "1,2,3,-5,2";
         try {
             calculator.Add(numbers);
+            fail("You should throw an Exception");
         } catch (NegativeNumberException e) {
             Assert.assertEquals(e.getMessage(), "Negative not allow -5");
         }
@@ -80,6 +81,12 @@ class CalculatorTest {
     public void NumberBiggerThan1000Test () {
         String numbers = "1001,100,10,1";
         Assert.assertEquals(calculator.Add(numbers), 111);
+    }
+
+    @Test
+    public void LongDelimiterTest() {
+        String numbers = "//[****]\n4****6****7****9";
+        Assert.assertEquals(calculator.Add(numbers), 26);
     }
 
 }
