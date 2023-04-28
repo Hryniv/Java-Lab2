@@ -1,46 +1,53 @@
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testng.Assert;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CalculatorTest {
-    private final Calculator calculator = new Calculator();
+
+    @AfterEach
+    public void clear()
+    {
+        Calculator.delimiter = new StringBuilder(",|\n");
+    }
 
     @Test
-    void EmptyStringTest() {
+    public void EmptyStringTest_Ok() {
         String emptyString = "";
-        Assert.assertEquals(calculator.Add(emptyString), 0);
+        Assert.assertEquals(Calculator.add(emptyString), 0);
     }
 
     @Test
-    void OneElementStringTest() {
-        String numbers1 = "7";
-        Assert.assertEquals(calculator.Add(numbers1), 7);
+    public void OneElementStringTest_Ok() {
+        String numbers1 = "1";
+        Assert.assertEquals(Calculator.add(numbers1), 1);
     }
 
     @Test
-    void TwoElementStringTest() {
-        String numbers2 = "7,9";
-        Assert.assertEquals(calculator.Add(numbers2), 16);
+    public void TwoElementStringTest_Ok() {
+        String numbers2 = "1,2";
+        Assert.assertEquals(Calculator.add(numbers2), 3);
     }
 
     @Test
-    void UnknownAmountOfNumberTest() {
+    public void UnknownAmountOfNumberTest() {
         String numbers = "1,2,3,4,5,6,7,8,9,10";
-        Assert.assertEquals(calculator.Add(numbers), 55);
+        Assert.assertEquals(Calculator.add(numbers), 55);
     }
 
     @Test
-    void StringNewlineBetweenNumbersTest () {
+    public void NewlineBetweenNumbersTest_Ok() {
         String numbers = "1,2\n3,4";
-        Assert.assertEquals(calculator.Add(numbers), 10);
+        Assert.assertEquals(Calculator.add(numbers), 10);
     }
 
     @Test
-    public void InvalidInputTest() {
+    public void NewlineBetweenNumbersTest_NotOk() {
         String numbers = "1,2,\n4";
         try {
-            calculator.Add(numbers);
+            Calculator.add(numbers);
         } catch (RuntimeException e) {
             Assert.assertNotNull(e.getMessage(), "Your exception should have a description message\n");
             return;
@@ -51,42 +58,54 @@ class CalculatorTest {
     }
 
     @Test
-    public void DifferentDelimitersTest() {
-        String numbers = "//;\n1;3;2;4";
-        Assert.assertEquals(calculator.Add(numbers), 10);
+    public void DifferentDelimitersTest_Ok() {
+        String numbers = "//*\n1*3*2*4";
+        Assert.assertEquals(Calculator.add(numbers), 10);
     }
 
     @Test
-    public void MultipleNegativesNumbersTest() {
-        String numbers = "-1,2,3,5,-2,-9";
+    public void AllNegativesNumbersTest_NotOk() {
+        String numbers = "-1,-2,-3,-5,-2,-9";
         try {
-            calculator.Add(numbers);
+            Calculator.add(numbers);
         }   catch (NegativeNumberException e) {
-            Assert.assertEquals(e.getMessage(), "Negative not allow -1, -2, -9");
+            Assert.assertEquals(e.getMessage(), "Negative is not allow : -1,-2,-3,-5,-2,-9");
+            return;
         }
+        fail();
     }
 
     @Test
-    public void NegativeNumberTest() {
+    public void NegativeNumberTest_NotOk() {
         String numbers = "1,2,3,-5,2";
         try {
-            calculator.Add(numbers);
+            Calculator.add(numbers);
             fail("You should throw an Exception");
         } catch (NegativeNumberException e) {
-            Assert.assertEquals(e.getMessage(), "Negative not allow -5");
+            Assert.assertEquals(e.getMessage(), "Negative is not allow : -5");
         }
     }
 
     @Test
-    public void NumberBiggerThan1000Test () {
+    public void NumberBiggerThan1000Test_Ok() {
         String numbers = "1001,100,10,1";
-        Assert.assertEquals(calculator.Add(numbers), 111);
+        Assert.assertEquals(Calculator.add(numbers), 111);
     }
 
     @Test
-    public void LongDelimiterTest() {
-        String numbers = "//[****]\n4****6****7****9";
-        Assert.assertEquals(calculator.Add(numbers), 26);
+    public void LongDelimiterTest_Ok() {
+        String numbers = "//[%%%]\n4%%%6%%%7%%%9";
+        Assert.assertEquals(Calculator.add(numbers), 26);
     }
 
+    @Test
+    public void MultipleDelimitersTest_Ok() {
+        String numbers = "//[%%%][%%][%]\n1%2%%3%%%4%5";
+        Assert.assertEquals(Calculator.add(numbers), 15);
+    }
+    @Test
+    public void TwoLongDelimiterAndDefTest_Ok() {
+        String numbers = "//[*][###]\n1*2###3###4*5###6";
+        Assert.assertEquals(Calculator.add(numbers), 21);
+    }
 }

@@ -1,12 +1,11 @@
-
+import java.io.*;
+import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
 
-        int j = Integer.parseInt("-2");
-        if (j < 0) {
-            System.out.println("-2");;
-        }
+        System.out.println(Calculator.add("//[777][77][7]\n1,2,3777577172"));
+
     }
 
 }
